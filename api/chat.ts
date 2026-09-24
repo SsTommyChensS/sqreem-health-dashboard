@@ -9,7 +9,7 @@ import {
   LLM_MAX_TOKENS,
   LLM_TIMEOUT_MS,
   CHAT_INPUT_MAX_LENGTH,
-} from '../src/data/constants';
+} from 'src/data/constants';
 
 interface ChatRequest {
   message?: string;

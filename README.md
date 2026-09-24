@@ -2,7 +2,7 @@
 
 A responsive web app that turns a fictional user's health & wellness data into a clear, actionable dashboard, with a floating AI assistant that answers questions grounded in that same data.
 
-**Live demo:** `<add your deployed Vercel URL here>`
+**Live demo:** https://tommy-health-dashboard.vercel.app/
 
 ---
 
