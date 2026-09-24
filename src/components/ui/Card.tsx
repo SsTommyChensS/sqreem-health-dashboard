@@ -39,17 +39,30 @@ export const CardHeader = memo(({
   className,
 }: CardHeaderProps) => {
   return (
-    <div className={twMerge('flex items-center justify-between gap-3 mb-4', className)}>
-      <div className="flex items-center gap-2.5 min-w-0">
-        {icon && <div className="text-slate-500 flex-shrink-0">{icon}</div>}
+    <div
+      className={twMerge(
+        'flex flex-col gap-3 mb-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4',
+        className
+      )}
+    >
+      <div className="flex items-start gap-2.5 min-w-0 sm:flex-1">
+        {icon && <div className="text-slate-500 flex-shrink-0 mt-0.5">{icon}</div>}
         <div className="min-w-0">
-          <h3 className="font-semibold text-slate-800 text-sm md:text-base leading-tight truncate">
+          <h3 className="font-semibold text-slate-800 text-sm md:text-base leading-tight">
             {title}
           </h3>
-          {subtitle && <p className="text-xs text-slate-400 mt-0.5 truncate">{subtitle}</p>}
+          {subtitle && (
+            <p className="text-xs text-slate-400 mt-0.5 leading-snug">
+              {subtitle}
+            </p>
+          )}
         </div>
       </div>
-      {action && <div className="flex-shrink-0">{action}</div>}
+      {action && (
+        <div className="w-full sm:w-auto sm:flex-shrink-0">
+          {action}
+        </div>
+      )}
     </div>
   );
 });
