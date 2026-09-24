@@ -9,7 +9,7 @@ import {
   Tooltip,
   ReferenceLine,
 } from 'recharts';
-import { TrendingUp, Footprints, Moon, HeartPulse, Scale, Flame } from 'lucide-react';
+import { TrendingUp, Footprints, Moon, HeartPulse, Scale, Flame, ChevronDown } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   selectFilteredSnapshots,
@@ -42,7 +42,7 @@ const COLORS = {
   slate: { 50: '#f8fafc', 100: '#f1f5f9', 400: '#94a3b8', 500: '#64748b' },
 } as const;
 
-export interface TrendsChartProps {}
+export interface TrendsChartProps { }
 
 interface MetricConfig {
   key: keyof HealthSnapshot;
@@ -193,34 +193,57 @@ export const TrendsChart = memo((_props: TrendsChartProps) => {
     <Card>
       <CardHeader
         title="Biomarker Trends"
-        subtitle={`Chronological trajectory over the last ${
-          timeRange === '7d' ? '7 days' : timeRange === '14d' ? '14 days' : '30 days'
-        }`}
+        subtitle={`Chronological trajectory over the last ${timeRange === '7d' ? '7 days' : timeRange === '14d' ? '14 days' : '30 days'
+          }`}
         icon={<TrendingUp className="w-5 h-5 text-emerald-600" />}
         action={
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-medium overflow-x-auto max-w-full">
-            {(Object.keys(METRIC_CONFIGS) as ChartMetric[]).map((key) => {
-              const cfg = METRIC_CONFIGS[key];
-              const isSelected = selectedMetric === key;
-              return (
-                <button
-                  key={key}
-                  onClick={() => dispatch(setSelectedMetric(key))}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all whitespace-nowrap ${
-                    isSelected
-                      ? 'bg-white text-slate-900 font-semibold shadow-xs'
-                      : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                  aria-label={`Show ${cfg.label} trend`}
-                >
-                  <span className={isSelected ? 'text-emerald-600' : 'text-slate-400'}>
-                    {cfg.icon}
-                  </span>
-                  <span>{cfg.label.replace('Daily ', '').replace('Resting ', '')}</span>
-                </button>
-              );
-            })}
-          </div>
+          <>
+            {/* Mobile: Select dropdown */}
+            <div className="relative sm:hidden w-full">
+              <select
+                value={selectedMetric}
+                onChange={(e) => dispatch(setSelectedMetric(e.target.value as ChartMetric))}
+                className="w-full appearance-none bg-slate-100 text-slate-900 text-xs font-medium rounded-xl pl-9 pr-8 py-2.5 border-0 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 cursor-pointer"
+                aria-label="Select metric"
+              >
+                {(Object.keys(METRIC_CONFIGS) as ChartMetric[]).map((key) => (
+                  <option key={key} value={key}>
+                    {METRIC_CONFIGS[key].label}
+                  </option>
+                ))}
+              </select>
+              {/* Selected metric icon overlay */}
+              <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-600">
+                {currentConfig.icon}
+              </span>
+              {/* Chevron indicator */}
+              <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            </div>
+
+            {/* Desktop: Tag buttons */}
+            <div className="hidden sm:flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-medium">
+              {(Object.keys(METRIC_CONFIGS) as ChartMetric[]).map((key) => {
+                const cfg = METRIC_CONFIGS[key];
+                const isSelected = selectedMetric === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => dispatch(setSelectedMetric(key))}
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all whitespace-nowrap ${isSelected
+                        ? 'bg-white text-slate-900 font-semibold shadow-xs'
+                        : 'text-slate-500 hover:text-slate-900'
+                      }`}
+                    aria-label={`Show ${cfg.label} trend`}
+                  >
+                    <span className={isSelected ? 'text-emerald-600' : 'text-slate-400'}>
+                      {cfg.icon}
+                    </span>
+                    <span>{cfg.label.replace('Daily ', '').replace('Resting ', '')}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </>
         }
       />
 
